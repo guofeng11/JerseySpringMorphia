@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context 
+	     http://www.springframework.org/schema/context/spring-context.xsd">
+		 
+	<description>Spring MongoDB配置</description>
+	<context:property-placeholder location="classpath:mongo.properties" />
+	
+	<bean id="mongoServerAddress" class="com.mongodb.ServerAddress">
+		<constructor-arg value="${mongo.host}" />
+		<constructor-arg value="${mongo.port}" />
+	</bean>
+	<bean id="mongoCredential" class="com.mongodb.MongoCredential"
+		factory-method="createCredential">
+		<constructor-arg value="${mongo.username}" />
+		<constructor-arg value="${mongo.database}" />
+		<constructor-arg value="${mongo.password}" />
+	</bean>
+	<bean id="mongoClient" class="com.mongodb.MongoClient"
+		destroy-method="close">
+		<constructor-arg ref="mongoServerAddress" />		
+		<!-- <constructor-arg>
+			<list>
+				<ref bean="mongoCredential" />
+			</list>
+		</constructor-arg> -->
+	</bean>
+	<bean id="morphia" class="org.mongodb.morphia.Morphia" />
+	<bean id="datastore" class="org.mongodb.morphia.Datastore"
+		factory-bean="morphia" factory-method="createDatastore">
+		<constructor-arg ref="mongoClient" />
+		<constructor-arg value="${mongo.database}" />
+	</bean>
+	<!--下面是所有业务类dao bean定义-->
+    <bean id="employeeRepository" class="cn.com.dao.EmployeeRepositoryImpl">
+        <constructor-arg ref="datastore"/>
+    </bean>
+</beans>
