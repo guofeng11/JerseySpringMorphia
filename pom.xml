@@ -7,20 +7,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Jersey Spring Morphia Maven Webapp</name>
 
-	<repositories>
-		<repository>
-			<id>repoLocal</id>
-			<name>maven-public</name>
-			<url>http://nexus.gf:8081/repository/maven-public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<properties>
 		<!-- Enable Java 8 -->
 		<java.version>1.8</java.version>
